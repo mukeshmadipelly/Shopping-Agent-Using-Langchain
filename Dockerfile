@@ -12,12 +12,12 @@ COPY pyproject.toml uv.lock ./
 # Install dependencies
 RUN uv sync --frozen --no-dev
 
-# Seed the SQLite database (store.db is gitignored, so it must be built into the image)
-RUN uv run python -m src.shopping_agent.setup_db
-
 # Copy application code
 COPY src/ ./src/
 COPY resources/ ./resources/
+
+# Seed the SQLite database (store.db is gitignored, so it must be built into the image)
+RUN uv run python -m src.shopping_agent.setup_db
 
 # Expose Streamlit port
 EXPOSE 8501
