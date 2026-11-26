@@ -33,7 +33,11 @@ function getOrCreateSessionId(): string {
   if (typeof window === "undefined") return "default-session";
   const existing = window.localStorage.getItem(SESSION_KEY);
   if (existing) return existing;
-  const generated = `sess-${crypto.randomUUID().slice(0, 12)}`;
+  const randomPart =
+    typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+      ? crypto.randomUUID().slice(0, 12)
+      : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+  const generated = `sess-${randomPart}`;
   window.localStorage.setItem(SESSION_KEY, generated);
   return generated;
 }
