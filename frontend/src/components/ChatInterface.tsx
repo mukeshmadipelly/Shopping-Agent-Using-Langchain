@@ -16,6 +16,34 @@ const STARTER_PROMPTS = [
   "Show my order history",
 ];
 
+function renderFormattedText(text: string): React.ReactNode {
+  const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`)/g);
+  return parts.map((part, idx) => {
+    if (part.startsWith("**") && part.endsWith("**") && part.length > 4) {
+      return (
+        <strong key={idx} className="font-semibold">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    if (part.startsWith("*") && part.endsWith("*") && part.length > 2) {
+      return (
+        <em key={idx} className="italic">
+          {part.slice(1, -1)}
+        </em>
+      );
+    }
+    if (part.startsWith("`") && part.endsWith("`") && part.length > 2) {
+      return (
+        <code key={idx} className="rounded bg-slate-100 px-1 py-0.5 text-xs font-mono text-slate-800">
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+    return <React.Fragment key={idx}>{part}</React.Fragment>;
+  });
+}
+
 export function ChatInterface() {
   const { sessionId, cart, syncCartFromAgent, refreshOrders } = useCart();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -255,7 +283,11 @@ export function ChatInterface() {
                     />
                   )}
                   <div className="whitespace-pre-wrap">
-                    {msg.content || (isStreaming && msg.role === "assistant" ? "Thinking..." : "")}
+                    {msg.content
+                      ? renderFormattedText(msg.content)
+                      : isStreaming && msg.role === "assistant"
+                      ? "Thinking..."
+                      : ""}
                   </div>
                 </div>
 
