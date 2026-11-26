@@ -1,7 +1,7 @@
 [project]
 name = "shopping-agent"
 version = "0.1.0"
-description = "Add your description here"
+description = "Scalable Shopping Agent with FastAPI, PostgreSQL, LangChain, and Next.js"
 readme = "README.md"
 
 requires-python = ">=3.13"
@@ -9,11 +9,22 @@ dependencies = [
     "langchain>=0.3.0",
     "langchain-core>=1.0.0",
     "langchain-google-genai>=4.2.2",
-    "langchain-groq>=0.3.0",
     "python-dotenv>=1.2.2",
+    "pillow>=12.2.0",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "asyncpg>=0.30.0",
+    "pydantic-settings>=2.6.0",
+    "python-multipart>=0.0.17",
+    "httpx>=0.28.0",
+]
+
+[project.optional-dependencies]
+legacy = [
     "streamlit>=1.57.0",
     "ipykernel>=7.2.0",
     "notebook>=7.5.6",
+    "langchain-groq>=0.3.0",
     "langchain-chroma>=1.1.0",
     "langchain-huggingface>=1.2.2",
     "chromadb>=1.5.9",
@@ -23,7 +34,16 @@ dependencies = [
     "pypdf>=6.11.0",
     "langchain-community>=0.4.1",
     "langchain-text-splitters>=1.1.2",
-    "pillow>=12.2.0",
     "torchvision>=0.27.0",
 ]
 
+[dependency-groups]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+pythonpath = ["."]
+testpaths = ["tests"]
